@@ -33,8 +33,8 @@
         tapping-term-ms = <200>;
         flavor = "tap-preferred";
         bindings = <&kp>, <&kp>;
-        tap-0 = <KEY_ESCAPE>;
-        hold-0 = <KEY_GRAVE>;
+        tap-action = <&kp KEY_ESCAPE>;
+        hold-action = <&kp KEY_GRAVE>;
     };
 
     // Hold-tap for TAB: tap=TAB, hold=GRAVE (for ESC+TAB chord)
@@ -44,8 +44,8 @@
         tapping-term-ms = <200>;
         flavor = "tap-preferred";
         bindings = <&kp>, <&kp>;
-        tap-0 = <KEY_TAB>;
-        hold-0 = <KEY_GRAVE>;
+        tap-action = <&kp KEY_TAB>;
+        hold-action = <&kp KEY_GRAVE>;
     };
 
     // Macro for Win+Shift+S screenshot
@@ -63,8 +63,8 @@
         tapping-term-ms = <200>;
         flavor = "hold-preferred";
         bindings = <&screenshot_macro>, <&kp>;
-        tap-0 = <0>;
-        hold-0 = <KEY_PSCRN>;
+        tap-action = <&screenshot_macro>;
+        hold-action = <&kp KEY_PSCRN>;
     };
 
     // Left encoder press: CAPS
