@@ -16,8 +16,6 @@
 #define ADJUST 3
 
 / {
-
-    // Activate ADJUST layer by pressing raise and lower
     conditional_layers {
         compatible = "zmk,conditional-layers";
         adjust_layer {
@@ -26,61 +24,24 @@
         };
     };
 
-    // Hold-tap for ESC: tap=ESC, hold=GRAVE (for ESC+TAB chord)
-    esc_hold_grave: esc_hold_grave {
-        compatible = "zmk,behavior-hold-tap";
-        #binding-cells = <0>;
-        tapping-term-ms = <200>;
-        flavor = "tap-preferred";
-        bindings = <&kp>, <&kp>;
-        tap-action = <&kp KEY_ESCAPE>;
-        hold-action = <&kp KEY_GRAVE>;
-    };
+    behaviors {
+        // Defines a tap-preferred hold-tap (used for ESC/GRAVE and TAB/GRAVE)
+        tp: tap_preferred {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            flavor = "tap-preferred";
+            bindings = <&kp>, <&kp>;
+        };
 
-    // Hold-tap for TAB: tap=TAB, hold=GRAVE (for ESC+TAB chord)
-    tab_hold_grave: tab_hold_grave {
-        compatible = "zmk,behavior-hold-tap";
-        #binding-cells = <0>;
-        tapping-term-ms = <200>;
-        flavor = "tap-preferred";
-        bindings = <&kp>, <&kp>;
-        tap-action = <&kp KEY_TAB>;
-        hold-action = <&kp KEY_GRAVE>;
-    };
-
-    // Macro for Win+Shift+S screenshot
-    screenshot_macro: screenshot_macro {
-        compatible = "zmk,behavior-macro";
-        #binding-cells = <0>;
-        wait-ms = <10>;
-        tap-bindings = <&kp LGUI &kp LSHFT &kp PSCRN>;
-    };
-
-    // Hold-tap for screenshot: tap=Win+Shift+S, hold=PSCRN
-    screenshot_hold_pscrn: screenshot_hold_pscrn {
-        compatible = "zmk,behavior-hold-tap";
-        #binding-cells = <0>;
-        tapping-term-ms = <200>;
-        flavor = "hold-preferred";
-        bindings = <&screenshot_macro>, <&kp>;
-        tap-action = <&screenshot_macro>;
-        hold-action = <&kp KEY_PSCRN>;
-    };
-
-    // Left encoder press: CAPS
-    left_encoder_press: left_encoder_press {
-        compatible = "zmk,behavior-macro";
-        #binding-cells = <0>;
-        wait-ms = <10>;
-        tap-bindings = <&kp CAPS>;
-    };
-
-    // Right encoder press: Play/Pause
-    right_encoder_press: right_encoder_press {
-        compatible = "zmk,behavior-macro";
-        #binding-cells = <0>;
-        wait-ms = <10>;
-        tap-bindings = <&kp C_PP>;
+        // Defines a hold-preferred hold-tap (used for your PSCRN / Snipping Tool combo)
+        hp: hold_preferred {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            flavor = "hold-preferred";
+            bindings = <&kp>, <&kp>;
+        };
     };
 
     keymap {
@@ -94,19 +55,17 @@
 // |  SHIFT  |   Z    |   X    |   C    |   V    |   B    |  PREV/NEXT/CAP  |  VOL+-/PLAY/PAUSE  |   N    |   M    |   ,    |   .    |   /    |   ]}   |
 // |         |  LALT  |  LGUI  |  SS    | RAISE  | SPACE  |                          | ENTER  |  LOWER  |  BSPC  |  RALT  |  RGUI  |
             bindings = <
-&esc_hold_grave  &kp N1       &kp N2       &kp N3       &kp N4       &kp N5                                &kp N6       &kp N7       &kp N8       &kp N9       &kp N0       &kp EQUAL
-&tab_hold_grave  &kp Q        &kp W        &kp E        &kp R        &kp T                                 &kp Y        &kp U        &kp I        &kp O        &kp P        &kp LBRC
-&kp LCTRL        &mt MOD_LGUI A &mt MOD_LALT S &mt MOD_LCTRL D &mt MOD_LSHFT F &kp G                         &kp H        &mt MOD_RSHFT J &mt MOD_RCTRL K &mt MOD_RALT L &mt MOD_RGUI SEMI &kp DQT
-&kp LSHFT        &kp Z        &kp X        &kp C        &kp V        &kp B        &left_encoder_press  &right_encoder_press  &kp N        &kp M        &kp COMMA    &kp DOT      &kp FSLH     &kp RBRC
-                  &kp LALT &kp LGUI  &screenshot_hold_pscrn  &mo RAISE  &kp SPACE    &kp ENTER  &mo LOWER &kp BSPC  &kp RALT  &kp RGUI
+&tp GRAVE ESC &kp N1     &kp N2     &kp N3      &kp N4      &kp N5                                 &kp N6     &kp N7      &kp N8      &kp N9     &kp N0        &kp EQUAL
+&tp GRAVE TAB &kp Q      &kp W      &kp E       &kp R       &kp T                                  &kp Y      &kp U       &kp I       &kp O      &kp P         &kp LBRC
+&kp LCTRL     &mt LGUI A &mt LALT S &mt LCTRL D &mt LSHFT F &kp G                                  &kp H      &mt RSHFT J &mt RCTRL K &mt RALT L &mt RGUI SEMI &kp DQT
+&kp LSHFT     &kp Z      &kp X      &kp C       &kp V       &kp B       &kp CAPS       &kp C_PP    &kp N      &kp M       &kp COMMA   &kp DOT    &kp FSLH      &kp RBRC
+                         &kp LALT   &kp LGUI    &hp PSCRN LG(LS(S)) &mo RAISE &kp SPACE  &kp ENTER   &mo LOWER  &kp BSPC    &kp RALT   &kp RGUI
             >;
-
             sensor-bindings = <&inc_dec_kp C_PREV C_NEXT &inc_dec_kp C_VOL_DN C_VOL_UP>;
         };
 
         lower_layer {
             display-name = "lower";
-// TODO: Some binds are waiting for shifted keycode support.
 // |         |   F1   |   F2   |   F3   |   F4   |   F5   |                          |   F6   |   F7   |   F8   |   F9   |   F10  |   F11  |
 // |   `     |   1    |   2    |   3    |   4    |   5    |                          |   6    |   7    |   8    |   9    |   0    |   F12  |
 // |         |   !    |   @    |   #    |   $    |   %    |                          |   ^    |   &    |   *    |   (    |   )    |   |    |
@@ -119,7 +78,6 @@
 &trans    &kp EQUAL &kp MINUS &kp PLUS    &kp LBRC  &kp RBRC   &trans &trans  &kp LBKT  &kp RBKT &kp SEMI  &kp COLON &kp BSLH  &trans
                     &trans    &trans      &trans    &trans     &trans &trans  &trans    &trans   &trans    &trans
             >;
-
             sensor-bindings = <&inc_dec_kp C_PREV C_NEXT &inc_dec_kp C_VOL_DN C_VOL_UP>;
         };
 
@@ -135,28 +93,25 @@
 &trans     &kp INS      &kp PSCRN    &kp K_CMENU  &trans       &trans                        &kp PG_UP &trans    &kp UP   &trans    &kp N0  &trans
 &trans     &kp LALT     &kp LCTRL    &kp LSHFT    &trans       &kp CLCK                      &kp PG_DN &kp LEFT  &kp DOWN &kp RIGHT &kp BSPC &kp DEL
 &trans     &kp K_UNDO   &kp K_CUT    &kp K_COPY   &kp K_PASTE  &trans        &trans  &trans  &trans    &trans    &trans   &trans    &trans  &trans
-                    &trans       &trans       &trans       &trans        &trans  &trans  &trans    &trans    &trans   &trans
+                        &trans       &trans       &trans       &trans        &trans  &trans  &trans    &trans    &trans   &trans
             >;
-
             sensor-bindings = <&inc_dec_kp C_PREV C_NEXT &inc_dec_kp C_VOL_DN C_VOL_UP>;
         };
 
         adjust_layer {
-// Gaming/Adjust Layer - Left side gaming (copy default), Right side adjust controls
+            display-name = "adjust";
 // |   ESC   |   1!   |   2@   |   3#   |   4$   |   5%   |                          | BTCLR  |  BT1   |  BT2   |  BT3   |  BT4   |  BT5   |
 // |   TAB   |   Q    |   W    |   E    |   R    |   T    |                          | EXTPWR | RGB_HUD| RGB_HUI| RGB_SAD| RGB_SAI| RGB_EFF|
 // |  CTRL   |   A    |   S    |   D    |   F    |   G    |                          |        | RGB_BRD| RGB_BRI|        |        |        |
-// |  SHIFT  |   Z    |   X    |   C    |   V    |   B    |  MUTE  |  CAPS  |  PP    |        |        |        |        |        | RGB_TOG|
-// |         |  LGUI  |  LALT  | SPACE  | RAISE  | ENTER  |  MUTE  |        |        |        |        |
-            display-name = "adjust";
+// |  SHIFT  |   Z    |   X    |   C    |   V    |   B    |        |        |        |        |        |        |        |        | RGB_TOG|
+// |         |  LGUI  |  LALT  | SPACE  | RAISE  | ENTER  |        |        |        |        |        |        |        |
             bindings = <
-&kp ESC        &kp N1       &kp N2       &kp N3       &kp N4       &kp N5                                &bt BT_CLR     &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4
-&kp TAB        &kp Q        &kp W        &kp E        &kp R        &kp T                                 &ext_power EP_TOG &rgb_ug RGB_HUD &rgb_ug RGB_HUI &rgb_ug RGB_SAD &rgb_ug RGB_SAI &rgb_ug RGB_EFF
-&kp LCTRL      &kp A        &kp S        &kp D        &kp F        &kp G                                 &none          &rgb_ug RGB_BRD &rgb_ug RGB_BRI &none         &none         &none
-&kp LSHFT      &kp Z        &kp X        &kp C        &kp V        &kp B        &kp C_MUTE  &left_encoder_press  &right_encoder_press  &none         &none         &none         &none         &none         &rgb_ug RGB_TOG
-               &kp LGUI     &kp LALT     &kp SPACE    &mo RAISE    &kp ENTER     &kp C_MUTE   &none       &none         &none         &none
+&kp ESC    &kp N1     &kp N2     &kp N3     &kp N4     &kp N5                                      &bt BT_CLR        &bt BT_SEL 0    &bt BT_SEL 1    &bt BT_SEL 2    &bt BT_SEL 3    &bt BT_SEL 4
+&kp TAB    &kp Q      &kp W      &kp E      &kp R      &kp T                                       &ext_power EP_TOG &rgb_ug RGB_HUD &rgb_ug RGB_HUI &rgb_ug RGB_SAD &rgb_ug RGB_SAI &rgb_ug RGB_EFF
+&kp LCTRL  &kp A      &kp S      &kp D      &kp F      &kp G                                       &none             &rgb_ug RGB_BRD &rgb_ug RGB_BRI &none           &none           &none
+&kp LSHFT  &kp Z      &kp X      &kp C      &kp V      &kp B      &kp C_MUTE        &kp C_PP       &none             &none           &none           &none           &none           &rgb_ug RGB_TOG
+           &kp LGUI   &kp LALT   &kp SPACE  &mo RAISE  &kp ENTER  &none             &none          &none             &none           &none           &none
             >;
-
             sensor-bindings = <&inc_dec_kp C_PREV C_NEXT &inc_dec_kp C_VOL_DN C_VOL_UP>;
         };
 
