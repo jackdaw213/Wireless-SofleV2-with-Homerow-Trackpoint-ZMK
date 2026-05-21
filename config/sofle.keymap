@@ -115,7 +115,7 @@
             bindings = <
 &tp GRAVE ESC &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3  &bt BT_SEL 4                       &trans    &trans       &trans   &trans        &trans  &trans
 &tp GRAVE TAB &kp INS      &kp PSCRN    &kp K_CMENU  &trans        &bt BT_CLR                         &kp PG_UP &kp LC(LEFT) &kp UP   &kp LC(RIGHT) &trans  &trans
-&kp LCTRL     &kp LALT     &kp LCTRL    &kp LSHFT    &hp LG(LS(S)) &kp CLCK                           &kp PG_DN &kp LEFT     &kp DOWN &kp RIGHT     &kp DEL &kp BSPC
+&kp LCTRL     &kp LALT     &kp LCTRL    &kp LSHFT    &kp LG(LS(S)) &kp CLCK                           &kp PG_DN &kp LEFT     &kp DOWN &kp RIGHT     &kp DEL &kp BSPC
 &kp LSHFT     &kp K_UNDO   &kp K_CUT    &kp K_COPY   &kp K_PASTE   &trans       &trans   &trans       &trans    &trans       &trans   &trans        &trans  &trans
                            &trans       &trans       &trans        &trans       &trans   &tog ADJUST  &trans    &trans       &trans   &trans
             >;
